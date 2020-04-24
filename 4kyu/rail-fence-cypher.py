@@ -53,13 +53,14 @@ them with the ciphertext in order to decode it.
 This got me thinking that it would be a lot better if the representation
 of the rails was done in a 'one dimensional' structure, rather than an
 'n-dimensional' structure where 'n' is the number of rails. This is what 
-I had before, when using one list per rail. Eventually I realised that
-I could use an object with two elements to (such as a tuple) to represent 
+I had implemented in encode_1_clumsy(), with one list per rail. 
+
+Eventually I realised I could use an object with two elements to represent 
 each letter in the text, with on element being a representation of the
 'rail' and the other to hold the text that is being encoded / decoded.
 
 For example, to encode the eleven character text "HELLO WORLD" with three
-rails, I would just create an 'empty' grid of eleven tuples, with the
+rails, I would just create an 'empty' grid of eleven 'cells', with the
 first element in each being the rail number:
 
 +---+---+---+---+---+---+---+---+---+---+---+
@@ -68,22 +69,38 @@ first element in each being the rail number:
 |   |   |   |   |   |   |   |   |   |   |   |
 +---+---+---+---+---+---+---+---+---+---+---+
 
-I would then fill the second element in each tuple with the plaintext:
+This could simply be a list of lists:
+
+encode_grid = [
+    [1, ""],
+    [2, ""],
+    [3, ""],
+    [2, ""],
+    [1, ""],
+    [2, ""],
+    ... etc.
+]
+
+I would then fill the second element in each 'cell' with the plaintext:
 
 +---+---+---+---+---+---+---+---+---+---+---+
 | 1 | 2 | 3 | 2 | 1 | 2 | 3 | 2 | 1 | 2 | 3 |
 +---+---+---+---+---+---+---+---+---+---+---+
 | H | E | L | L | O | _ | W | O | R | L | D |
 +---+---+---+---+---+---+---+---+---+---+---+
+
+encode_grid = [
+    [1, "H"],
+    [2, "E"],
+    [3, "L"],
+    [2, "L"],
+    [1, "O"],
+    [2, " "],
+    ... etc.
+]
 
 I would then pull out all the '1's (i.e. the first rail), then the 
 '2's etc.:
-
-+---+---+---+---+---+---+---+---+---+---+---+
-| 1 | 2 | 3 | 2 | 1 | 2 | 3 | 2 | 1 | 2 | 3 |
-+---+---+---+---+---+---+---+---+---+---+---+
-| H | E | L | L | O | _ | W | O | R | L | D |
-+---+---+---+---+---+---+---+---+---+---+---+
 
 H, O, R ... E, L, _, O, L ... L, W, D
 
@@ -122,7 +139,7 @@ Then add the next characters to the second 'rail':
 | H | E |   | L | O | _ |   | O | R | L |   |
 +---+---+---+---+---+---+---+---+---+---+---+
 
-Then continue through the rails until you run out of cells!
+Then continue through the rails until you run out of 'cells'!
 
 """
 
