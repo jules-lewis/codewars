@@ -1,4 +1,4 @@
-'''
+"""
 Rail Fence Cipher: Encoding and Decoding
 
 URL: https://www.codewars.com/kata/58c5577d61aefcf3ff000081/train/python
@@ -37,7 +37,94 @@ Note that the example above excludes the punctuation and spaces just for
 simplicity. There are, however, tests that include punctuation. Don't 
 filter out punctuation as they are a part of the string.
 
-'''
+(1)
+
+My first attempt can be seen in encode_1_clumsy() below. The
+method is simply to step through <string>, adding each character to
+a list, with one list per rail, but this doesn't feel very efficient. 
+Also, it left me with no idea how to decode!?
+
+(2)
+
+Eventually I did a bit of reading and came across a comment on decoding
+that basically said you've got to create the rails, and then populate
+them with the ciphertext in order to decode it.
+
+This got me thinking that it would be a lot better if the representation
+of the rails was done in a 'one dimensional' structure, rather than an
+'n-dimensional' structure where 'n' is the number of rails. This is what 
+I had before, when using one list per rail. Eventually I realised that
+I could use an object with two elements to (such as a tuple) to represent 
+each letter in the text, with on element being a representation of the
+'rail' and the other to hold the text that is being encoded / decoded.
+
+For example, to encode the eleven character text "HELLO WORLD" with three
+rails, I would just create an 'empty' grid of eleven tuples, with the
+first element in each being the rail number:
+
++---+---+---+---+---+---+---+---+---+---+---+
+| 1 | 2 | 3 | 2 | 1 | 2 | 3 | 2 | 1 | 2 | 3 |
++---+---+---+---+---+---+---+---+---+---+---+
+|   |   |   |   |   |   |   |   |   |   |   |
++---+---+---+---+---+---+---+---+---+---+---+
+
+I would then fill the second element in each tuple with the plaintext:
+
++---+---+---+---+---+---+---+---+---+---+---+
+| 1 | 2 | 3 | 2 | 1 | 2 | 3 | 2 | 1 | 2 | 3 |
++---+---+---+---+---+---+---+---+---+---+---+
+| H | E | L | L | O | _ | W | O | R | L | D |
++---+---+---+---+---+---+---+---+---+---+---+
+
+I would then pull out all the '1's (i.e. the first rail), then the 
+'2's etc.:
+
++---+---+---+---+---+---+---+---+---+---+---+
+| 1 | 2 | 3 | 2 | 1 | 2 | 3 | 2 | 1 | 2 | 3 |
++---+---+---+---+---+---+---+---+---+---+---+
+| H | E | L | L | O | _ | W | O | R | L | D |
++---+---+---+---+---+---+---+---+---+---+---+
+
+H, O, R ... E, L, _, O, L ... L, W, D
+
+Which gives us the correct ciphertext "HOREL OLLWD"
+
+Decoding would work in a similar way:
+
+  (i) create a one-dimensional grid the length of the ciphertext
+ (ii) use the first characters in the ciphertext to populate
+      the first 'rail'
+(iii) populate each next 'rail' until you get to the end
+
+So to decode "HOREL OLLWD" as a three rail ciper, start with an
+eleven character grid, marked up for three rails:
+
++---+---+---+---+---+---+---+---+---+---+---+
+| 1 | 2 | 3 | 2 | 1 | 2 | 3 | 2 | 1 | 2 | 3 |
++---+---+---+---+---+---+---+---+---+---+---+
+|   |   |   |   |   |   |   |   |   |   |   |
++---+---+---+---+---+---+---+---+---+---+---+
+
+Use the first characters in the ciphertext to fill out the
+first rail:
+
++---+---+---+---+---+---+---+---+---+---+---+
+| 1 | 2 | 3 | 2 | 1 | 2 | 3 | 2 | 1 | 2 | 3 |
++---+---+---+---+---+---+---+---+---+---+---+
+| H |   |   |   | O |   |   |   | R |   |   |
++---+---+---+---+---+---+---+---+---+---+---+
+
+Then add the next characters to the second 'rail':
+
++---+---+---+---+---+---+---+---+---+---+---+
+| 1 | 2 | 3 | 2 | 1 | 2 | 3 | 2 | 1 | 2 | 3 |
++---+---+---+---+---+---+---+---+---+---+---+
+| H | E |   | L | O | _ |   | O | R | L |   |
++---+---+---+---+---+---+---+---+---+---+---+
+
+Then continue through the rails until you run out of cells!
+
+"""
 
 def encode_rail_fence_cipher(string, n_rails):
 
