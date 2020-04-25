@@ -39,7 +39,7 @@ filter out punctuation as they are a part of the string.
 
 (1)
 
-My first attempt can be seen in encode_1_clumsy() below. The
+My first attempt can be seen in encode_clumsy() below. The
 method is simply to step through <string>, adding each character to
 a list, with one list per rail, but this doesn't feel very efficient. 
 Also, it left me with no idea how to decode!?
@@ -53,7 +53,7 @@ them with the ciphertext in order to decode it.
 This got me thinking that it would be a lot better if the representation
 of the rails was done in a 'one dimensional' structure, rather than an
 'n-dimensional' structure where 'n' is the number of rails. This is what 
-I had implemented in encode_1_clumsy(), with one list per rail. 
+I had implemented in encode_clumsy(), with one list per rail. 
 
 Eventually I realised I could use an object with two elements to represent 
 each letter in the text, with on element being a representation of the
@@ -145,13 +145,61 @@ Then continue through the rails until you run out of 'cells'!
 
 def encode_rail_fence_cipher(string, n_rails):
 
-    return encode_1_clumsy(string, n_rails)
+    #Make a grid the length of the string, marked up with
+    #the rail values.
+    grid = make_grid(len(string), n_rails)
+
+    
+    #Fill the grid with the string
+    for i in range(len(string)):
+        grid[i][1] = string[i]
+
+    #Pull out the encoded text, rail by rail
+    rtn = []
+    for i in range(n_rails):
+        rtn.extend([cell[1] for cell in grid if cell[0] == i])
+    return "".join(rtn)
     
 def decode_rail_fence_cipher(string, n_rails):
 
-    pass
+    #Make a grid the length of the string, marked up with
+    #the rail values.
+    grid = make_grid(len(string), n_rails)
 
-def encode_1_clumsy(string, n_rails):
+    #Use the ciphertext to populate the grid, rail by rail
+    string_index = 0
+    for i in range(n_rails):
+        for cell in grid:
+            if cell[0] == i:
+                cell[1] = string[string_index]
+                string_index += 1
+
+    #Pull out the cells in order -- should be the decoded text!
+    return "".join(cell[1] for cell in grid)
+    
+def make_grid(length, rails):
+
+    grid = []
+    current_rail = 0
+
+    #remember if we are going up the rails or down
+    #  1 means up
+    # -1 means down
+    direction = 1
+
+    for i in range(length):
+        
+        #populate a new cell
+        grid.append([current_rail, ""])
+        current_rail += direction
+        
+        #change direction if necessary
+        if (current_rail == 0) and (direction == -1): direction = 1
+        if (current_rail == rails-1) and (direction == 1): direction = -1
+
+    return  grid
+
+def encode_clumsy(string, n_rails):
 
     '''
     My first thought is to simply step through <string>, adding
@@ -187,6 +235,11 @@ def encode_1_clumsy(string, n_rails):
     #having got here, I realise I have no straightforward way to decode!
 
 
-print(encode_1_clumsy("hello there sexy boy", 3))
-
-print(encode_1_clumsy("abcdefghijklmnopqrstuvwxyz", 4))
+print(encode_clumsy("hello there sexy boy", 3))
+print(encode_clumsy("abcdefghijklmnopqrstuvwxyz", 4))
+print(make_grid(11, 3))
+print(make_grid(20, 5))
+print(encode_rail_fence_cipher("hello there sexy boy", 3))
+print(decode_rail_fence_cipher("hoes el hr eybyltexo", 3))
+print(encode_rail_fence_cipher("abcdefghijklmnopqrstuvwxyz", 4))
+print(decode_rail_fence_cipher("agmsybfhlnrtxzceikoquwdjpv", 4))
