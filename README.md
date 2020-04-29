@@ -2,6 +2,11 @@
 
 Repo for practicing CodeWar katas and storing solutions. This will also include incomplete kata for me to go back to. Code is in Python unless otherwise stated. The code contains a link back to the kata in CodeWars.
 
+## [3 Kyu](https://github.com/jules-lewis/codewars/tree/master/3kyu)
+
+### [Sudoku Solver (*in progress*)](https://github.com/jules-lewis/codewars/blob/master/3kyu/sudoku-solver.py)  
+Solver for 'easy' (i.e. determinable) Sudokus.
+
 ## [4 Kyu](https://github.com/jules-lewis/codewars/tree/master/4kyu)
 
 ### [Ranking Poker Hands](https://github.com/jules-lewis/codewars/blob/master/4kyu/ranking-poker-hands.py)  
