@@ -69,15 +69,62 @@ def sudoku(puzzle):
     flat_puzzle = flatten_puzzle(puzzle)
 
     lookups = create_lookups()
-    #print(lookups)
 
-    return None
+    """
+    Now we solve...
+    We're going to loop through the cells of the sudoku, and
+    every loop through we're either going to:
+     * solve one or more cells
+     * discover that the Sudoku is complete
+    If neither of these happen, it's because my algorithm
+    doesn't work, and we'll report that.
+    """
+    b_changed_a_cell = True
+    while b_changed_a_cell:
+        b_changed_a_cell = False
+        b_puzzle_complete = True
+        for idx in range(81):
+            cell = flat_puzzle[idx]
+            if cell == 0:
+                checks = []
+                for lookup in lookups[idx]:
+                    lookup_val = flat_puzzle[lookup]
+                    #we're not interested in other empty cells
+                    if lookup_val != 0:
+                        checks.append(flat_puzzle[lookup])
+                #convert to a set so we only have unique items
+                checks = set(checks)
+                if len(checks) == 8:
+                    #this means we solved a cell, as all other
+                    #eight numbers are in one of the lookups
+                    checks = {1, 2, 3, 4, 5, 6, 7, 8, 9} - checks
+                    flat_puzzle[idx] = checks.pop()
+                    b_changed_a_cell = True
+                    print("We solved cell at index {}, which turned out to be {}.".format(idx, flat_puzzle[idx]))
+                else:
+                    #we found an empty cell we could not solve
+                    #this round, so the puzzle is (currently) incomplete
+                    b_puzzle_complete = False
+
+    if b_puzzle_complete:
+        print("We solved the puzzle!")
+    else:
+        print("We did not solve, sorry! Returning what we got...")
+
+    return(format_puzzle(flat_puzzle))
+
 
 def flatten_puzzle(puzzle):
-    r = []
+    rtn = []
     for line in puzzle:
-        r.extend(line)
-    return r
+        rtn.extend(line)
+    return rtn
+
+def format_puzzle(puzzle):
+    rtn = []
+    for idx in range(0, 81, 9):
+        rtn.append(puzzle[idx:idx+9])
+    return rtn
 
 def create_lookups():
 
