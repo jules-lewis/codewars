@@ -4,8 +4,12 @@ Repo for practicing CodeWar katas and storing solutions. This will also include 
 
 ## [3 Kyu](https://github.com/jules-lewis/codewars/tree/master/3kyu)
 
+### [Alphabetic Anagrams](https://github.com/jules-lewis/codewars/blob/master/3kyu/alphabetic-anagrams.py)  
+Assign a number to every 'word', based on where it falls in an alphabetically sorted list of all words made up of the same group of letters. There is a performance test to prevent coders using brute force (this is essentially a mathematical problem).
+
 ### [Sudoku Solver](https://github.com/jules-lewis/codewars/blob/master/3kyu/sudoku-solver.py)  
 Solver for 'easy' (i.e. determinable) Sudokus.
+
 
 ## [4 Kyu](https://github.com/jules-lewis/codewars/tree/master/4kyu)
 
