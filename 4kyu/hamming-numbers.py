@@ -112,7 +112,7 @@ def hamming_v3(n):
             if index == n:
                 last_good_index = n-1
                 return hammings[n-1]
-            hammings = sorted(set().union(hammings, [2*h, 3*h, 5*h]))
+            hammings = sorted(set(hammings).update([2*h, 3*h, 5*h]))
 
 
 def extendHamming(hammings, new_hamming):

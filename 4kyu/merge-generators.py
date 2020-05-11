@@ -1,7 +1,9 @@
 
 '''
 While trying to implement a lazy list (still haven't achieved this!), I ended up 
-writing a function to merge sorted generators, keeping the contents in order.
+writing a function to merge sorted generators, keeping the contents in order, 
+and only retaining unique items. The generators have to yield comparable types,
+i.e. you can't have gen_a serving integers while gen_b serves strings.
 '''
 
 # Yields an ordered list of results from generators a and b
