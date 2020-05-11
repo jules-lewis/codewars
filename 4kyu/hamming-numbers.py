@@ -54,10 +54,12 @@ don't understand generators well enough to solve the problem this
 way, so I'm going to try and get by with what I do know...
 
 """
-hammings = [1, 2, 3, 4]
+hammings = [1]
 
 #version 2 will try to remember where we put the lowest 'new'
 #Hamming and only start from there
+
+#version 3 uses set() and list sorting to beat extendHamming()!
 
 last_good_index = 0
 
@@ -94,6 +96,24 @@ def hamming_v2(n):
             extendHamming(hammings, 3*h)
             extendHamming(hammings, 5*h)
 
+def hamming_v3(n):
+
+    global last_good_index
+    global hammings
+    
+    index = last_good_index
+    
+    if n-1 < index:
+        return hammings[n-1]
+    else:
+        while True:
+            h = hammings[index]
+            index += 1
+            if index == n:
+                last_good_index = n-1
+                return hammings[n-1]
+            hammings = sorted(set().union(hammings, [2*h, 3*h, 5*h]))
+
 
 def extendHamming(hammings, new_hamming):
 
@@ -106,14 +126,14 @@ def extendHamming(hammings, new_hamming):
 
 
 
-print(hamming_v1(7))
-print(hamming_v1(12))
-print(hamming_v1(20))
-print(hamming_v1(100))
-print(hamming_v1(1000))
-print(hamming_v1(777))
-print(hamming_v1(77))
-print(hamming_v1(7))
+print(hamming_v1(7))         # 8
+print(hamming_v1(12))        # 16
+print(hamming_v1(20))        # 36
+print(hamming_v1(100))       # 1536
+print(hamming_v1(1000))      # 51200000
+print(hamming_v1(777))       # 10628820
+print(hamming_v1(77))        # 729
+print(hamming_v1(7))         # 8
 
 print(hamming_v2(7))
 print(hamming_v2(12))
@@ -123,4 +143,13 @@ print(hamming_v2(1000))
 print(hamming_v2(777))
 print(hamming_v2(77))
 print(hamming_v2(7))
+
+print(hamming_v3(7))
+print(hamming_v3(12))
+print(hamming_v3(20))
+print(hamming_v3(100))
+print(hamming_v3(1000))
+print(hamming_v3(777))
+print(hamming_v3(77))
+print(hamming_v3(7))
 
